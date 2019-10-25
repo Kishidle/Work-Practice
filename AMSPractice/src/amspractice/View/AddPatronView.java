@@ -6,6 +6,11 @@
 package amspractice.View;
 
 import amspractice.Model.Patron;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -22,6 +27,7 @@ public class AddPatronView extends javax.swing.JFrame {
     
     public AddPatronView() {
         initComponents();
+        
     }
 
     /**
@@ -190,6 +196,29 @@ public class AddPatronView extends javax.swing.JFrame {
         np.sethPhone(hPhoneTextField.getText());
         
         System.out.println(np.getfName() + " " + np.getlName());
+        
+        try{
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        }
+        catch(ClassNotFoundException e){
+            
+        }
+        
+        
+        String connectionUrl = "jdbc:sqlserver://DESKTOP-83NBMN;databaseName=testArca;integratedSecurity=true";
+        try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
+            String SQL = "SELECT * FROM Patrons";
+            ResultSet rs = stmt.executeQuery(SQL);
+            System.out.println("x");
+            
+            while(rs.next()){
+                System.out.println(rs.getString("firstname"));
+            }
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        
     }//GEN-LAST:event_okButtonActionPerformed
 
     /**
