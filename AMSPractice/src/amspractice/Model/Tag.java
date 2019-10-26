@@ -11,17 +11,17 @@ package amspractice.Model;
  */
 public class Tag {
     
-    private String tagType, fromLoc, toLoc;
+    private String entryType, fromLoc, toLoc;
     public Tag(){
         
     }
 
-    public String getTagType() {
-        return tagType;
+    public String getEntryType() {
+        return entryType;
     }
 
-    public void setTagType(String tagType) {
-        this.tagType = tagType;
+    public void setEntryType(String entryType) {
+        this.entryType = entryType;
     }
 
     public String getFromLoc() {

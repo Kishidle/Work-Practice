@@ -43,8 +43,8 @@ public class MainView extends javax.swing.JFrame {
         viewPatronMenu.addActionListener(new ActionListener(){
             
             public void actionPerformed(ActionEvent e){
-                AddTagView atv = new AddTagView();
-                atv.setVisible(true);
+                ViewPatronView vpv = new ViewPatronView();
+                vpv.setVisible(true);
                 dispose();
             }
         });
@@ -90,7 +90,7 @@ public class MainView extends javax.swing.JFrame {
         editPatronMenu.setText("Edit Patron");
         amsMenu.add(editPatronMenu);
 
-        viewPatronMenu.setText("View Patron");
+        viewPatronMenu.setText("View Patron(s)");
         amsMenu.add(viewPatronMenu);
 
         jMenuBar1.add(amsMenu);

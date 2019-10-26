@@ -191,9 +191,17 @@ public class AddPatronView extends javax.swing.JFrame {
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         // TODO add your handling code here:
         Patron np = new Patron();
+        switch(typeComboBox.getSelectedIndex()){
+            case 0: np.setAccountType(1); break;
+            case 1: np.setAccountType(2); break;
+            case 2: np.setAccountType(3); break;
+            case 3: np.setAccountType(4); break;
+            case 4: np.setAccountType(5); break;
+        }
         np.setfName(fNameTextField.getText());
         np.setlName(laNameTextField.getText());
         np.sethPhone(hPhoneTextField.getText());
+        np.setSex(sexComboBox.getSelectedItem().toString());
         
         System.out.println(np.getfName() + " " + np.getlName());
         
@@ -205,15 +213,26 @@ public class AddPatronView extends javax.swing.JFrame {
         }
         
         
-        String connectionUrl = "jdbc:sqlserver://DESKTOP-83NBMN;databaseName=testArca;integratedSecurity=true";
+        String connectionUrl = "jdbc:sqlserver://RAMON-PC\\SQLEXPRESS:64306;databaseName=testArca;integratedSecurity=true";
         try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
-            String SQL = "SELECT * FROM Patrons";
-            ResultSet rs = stmt.executeQuery(SQL);
+            String SQL = "INSERT INTO Patrons VALUES(" + np.getAccountType() + ", '" + np.getfName() + "', '" + np.getlName() + "', '" + np.getSex() + "', '" + np.gethPhone() + "')";
+            //String SQL = "SELECT * FROM Patrons";
+            /*ResultSet rs = stmt.executeQuery(SQL);
+            while(rs.next()){
+                System.out.println(rs.getString("first_name"));
+            }*/
+            int x = stmt.executeUpdate(SQL);
+            //int x = 1;
+            if(x > 0){
+                System.out.print("Patron registered successfully");
+            }
+            else{
+                System.out.print("Patron not registered");
+            }
+            
             System.out.println("x");
             
-            while(rs.next()){
-                System.out.println(rs.getString("firstname"));
-            }
+            
         }
         catch(SQLException e){
             e.printStackTrace();
