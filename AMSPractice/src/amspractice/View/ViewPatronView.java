@@ -251,6 +251,7 @@ public class ViewPatronView extends javax.swing.JFrame {
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         // TODO add your handling code here:
+        // TODO get account_id in select statement for use in add tag and add vehicle view and right click functionality of view patron
         
         int selectedIndex;
         String fName = "", lName = "", sex = "", hPhone = ""; 
