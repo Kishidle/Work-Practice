@@ -5,11 +5,14 @@
  */
 package amspractice.View;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,6 +28,71 @@ public class ViewPatronView extends javax.swing.JFrame {
         initComponents();
         
         populateTable();
+        
+        accountTypeComboBox.addItemListener(new ItemListener(){
+            
+            public void itemStateChanged(ItemEvent e){
+                
+                if(e.getStateChange() == ItemEvent.SELECTED){
+                    Object source = e.getSource();
+                    
+                    if(source instanceof JComboBox){
+                        JComboBox cb = (JComboBox) source;
+                        
+                        fNameTextField.setText("");
+                        lNameTextField.setText("");
+                        sexTextField.setText("");
+                        hPhoneTextField.setText("");
+                        
+                        int selectedIndex = cb.getSelectedIndex();
+                        String sql = "";
+                        switch(selectedIndex){
+                            case 0: 
+                                sql = "SELECT account_type, first_name, last_name, sex, home_phone FROM Patrons"; break;
+                            case 1: 
+                                sql = "SELECT account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 1"; break;
+                            case 2: 
+                                sql = "SELECT account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 2"; break;
+                            case 3: 
+                                sql = "SELECT account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 3"; break;
+                            case 4: 
+                                sql = "SELECT account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 4"; break;
+                            case 5: 
+                                sql = "SELECT account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 5"; break;
+                        }
+                        
+                        try{
+                            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                        }
+                        catch(ClassNotFoundException x){
+                            
+                        }
+                        
+                        String connectionUrl = "jdbc:sqlserver://RAMON-PC\\SQLEXPRESS:49364;databaseName=testArca;integratedSecurity=true";
+                        try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
+                            ResultSet rs = stmt.executeQuery(sql);
+                            
+                            DefaultTableModel model = (DefaultTableModel) patronTable.getModel();
+                            model.setRowCount(0);
+                            while(rs.next()){
+                                int accType = rs.getInt("account_type");
+                                String fName = rs.getString("first_name");
+                                String lName = rs.getString("last_name");
+                                String sex = rs.getString("sex");
+                                String hPhone = rs.getString("home_phone");
+                
+                            model.addRow(new Object[]{accType, fName, lName, sex, hPhone});
+                            }
+                        }
+                        catch(SQLException se){
+                            
+                        }
+                        
+                        
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -44,7 +112,13 @@ public class ViewPatronView extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         patronTable = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
+        accountTypeComboBox = new javax.swing.JComboBox<>();
+        fNameTextField = new javax.swing.JTextField();
+        lNameTextField = new javax.swing.JTextField();
+        sexTextField = new javax.swing.JTextField();
+        hPhoneTextField = new javax.swing.JTextField();
+        searchButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,7 +128,7 @@ public class ViewPatronView extends javax.swing.JFrame {
 
         jLabel3.setText("Last Name:");
 
-        jLabel4.setText("Sex");
+        jLabel4.setText("Sex:");
 
         jLabel5.setText("Home Phone:");
 
@@ -68,7 +142,21 @@ public class ViewPatronView extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(patronTable);
 
-        jButton1.setText("Go back");
+        backButton.setText("Go back");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
+        accountTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Any", "1 - Corporate Revenue", "2 - Individual Non-Revenue", "3 - Individual Revenue", "4 - Corporate Individual Revenue", "5 - Corporate Non-Rev" }));
+
+        searchButton.setText("Search");
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -76,41 +164,66 @@ public class ViewPatronView extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 657, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(255, 255, 255)
+                            .addComponent(jLabel1)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addGap(38, 38, 38)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(accountTypeComboBox, 0, 181, Short.MAX_VALUE)
+                            .addComponent(fNameTextField)
+                            .addComponent(lNameTextField))
+                        .addGap(20, 20, 20)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4)))
-                    .addComponent(jLabel1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 657, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(3, 3, 3)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(hPhoneTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+                            .addComponent(sexTextField))
+                        .addGap(76, 76, 76)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(searchButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(backButton)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jLabel1)
+                .addGap(17, 17, 17)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(accountTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabel4)
+                    .addComponent(fNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sexTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel5)
+                    .addComponent(lNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(hPhoneTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(backButton)
+                    .addComponent(searchButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -129,6 +242,79 @@ public class ViewPatronView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        MainView mv = new MainView();
+        mv.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_backButtonActionPerformed
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        // TODO add your handling code here:
+        
+        int selectedIndex;
+        String fName = "", lName = "", sex = "", hPhone = ""; 
+        String searchSQL = "SELECT account_type, first_name, last_name, sex, home_phone FROM Patrons ";
+        switch(accountTypeComboBox.getSelectedIndex()){
+            case 1: 
+                searchSQL = searchSQL.concat("WHERE account_type = 1"); 
+                break;
+            case 2:
+                searchSQL = searchSQL.concat("WHERE account_type = 2");
+                break;
+            case 3:
+                searchSQL = searchSQL.concat("WHERE account_type = 3");
+                break;
+            case 4:
+                searchSQL = searchSQL.concat("WHERE account_type = 4");
+                break;
+            case 5:
+                searchSQL = searchSQL.concat("WHERE account_type = 5");
+                break;
+        }
+        if(accountTypeComboBox.getSelectedIndex() != 0){
+            searchSQL = searchSQL.concat(" AND ");
+        }
+        else{
+            searchSQL = searchSQL.concat("WHERE ");
+        }
+        
+        fName = fNameTextField.getText();
+        lName = lNameTextField.getText();
+        sex = sexTextField.getText();
+        hPhone = hPhoneTextField.getText();
+        
+        searchSQL = searchSQL.concat("first_name LIKE '" + fName + "%' AND last_name LIKE '" + lName + "%' AND sex LIKE '" + sex + "%' AND home_phone LIKE '" + hPhone + "%'");
+        
+        try{
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");   
+        }
+        catch(ClassNotFoundException cnfe){
+            
+        }
+        System.out.println("searchSQL test");
+        System.out.println(searchSQL);
+        
+        String connectionUrl = "jdbc:sqlserver://RAMON-PC\\SQLEXPRESS:49364;databaseName=testArca;integratedSecurity=true";
+        try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
+            ResultSet rs = stmt.executeQuery(searchSQL);
+            DefaultTableModel model = (DefaultTableModel) patronTable.getModel();
+                model.setRowCount(0);
+                while(rs.next()){
+                    int accType = rs.getInt("account_type");
+                    fName = rs.getString("first_name");
+                    lName = rs.getString("last_name");
+                    sex = rs.getString("sex");
+                    hPhone = rs.getString("home_phone");
+                
+                    model.addRow(new Object[]{accType, fName, lName, sex, hPhone});
+                }
+        }
+        catch(SQLException sqle){
+            
+        }
+    }//GEN-LAST:event_searchButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -142,7 +328,7 @@ public class ViewPatronView extends javax.swing.JFrame {
             
         }
         
-        String connectionUrl = "jdbc:sqlserver://RAMON-PC\\SQLEXPRESS:64306;databaseName=testArca;integratedSecurity=true";
+        String connectionUrl = "jdbc:sqlserver://RAMON-PC\\SQLEXPRESS:49364;databaseName=testArca;integratedSecurity=true";
         
         try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
             //String SQL = "INSERT INTO Patrons VALUES(" + np.getAccountType() + ", '" + np.getfName() + "', '" + np.getlName() + "', '" + np.getSex() + "', '" + np.gethPhone() + "')";
@@ -211,7 +397,10 @@ public class ViewPatronView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> accountTypeComboBox;
+    private javax.swing.JButton backButton;
+    private javax.swing.JTextField fNameTextField;
+    private javax.swing.JTextField hPhoneTextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -219,6 +408,9 @@ public class ViewPatronView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField lNameTextField;
     private javax.swing.JTable patronTable;
+    private javax.swing.JButton searchButton;
+    private javax.swing.JTextField sexTextField;
     // End of variables declaration//GEN-END:variables
 }

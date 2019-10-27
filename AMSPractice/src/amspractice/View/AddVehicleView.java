@@ -7,7 +7,7 @@ package amspractice.View;
 
 /**
  *
- * @author Jonas
+ * @author Ramon
  */
 public class AddVehicleView extends javax.swing.JFrame {
 

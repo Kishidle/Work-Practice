@@ -6,11 +6,14 @@
 package amspractice.View;
 
 import amspractice.Model.Patron;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JComboBox;
 
 /**
  *
@@ -28,6 +31,39 @@ public class AddPatronView extends javax.swing.JFrame {
     public AddPatronView() {
         initComponents();
         
+        initializeComboBox();
+    }
+    
+    public void initializeComboBox(){
+        
+        typeComboBox.addItemListener(new ItemListener(){
+            
+            public void itemStateChanged(ItemEvent e){
+                
+                if(e.getStateChange() == ItemEvent.SELECTED){
+                    Object source = e.getSource();
+                    if(source instanceof JComboBox){
+                        JComboBox cb = (JComboBox)source;
+                        int selectedIndex = cb.getSelectedIndex();
+                        //dimming of textfields
+                        //TODO add company name instead of first name last name
+                        switch(selectedIndex){
+                            case 0: 
+                                sexComboBox.setEditable(false); 
+                                hPhoneTextField.setEditable(true); break;
+                            case 1: 
+                                sexComboBox.setEditable(true);
+                                hPhoneTextField.setEditable(false); break;
+                            case 2: 
+                                sexComboBox.setEditable(false); 
+                                hPhoneTextField.setEditable(false); break;
+                            case 3: break;
+                            case 4: break;
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -213,7 +249,7 @@ public class AddPatronView extends javax.swing.JFrame {
         }
         
         
-        String connectionUrl = "jdbc:sqlserver://RAMON-PC\\SQLEXPRESS:64306;databaseName=testArca;integratedSecurity=true";
+        String connectionUrl = "jdbc:sqlserver://RAMON-PC\\SQLEXPRESS:49364;databaseName=testArca;integratedSecurity=true";
         try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
             String SQL = "INSERT INTO Patrons VALUES(" + np.getAccountType() + ", '" + np.getfName() + "', '" + np.getlName() + "', '" + np.getSex() + "', '" + np.gethPhone() + "')";
             //String SQL = "SELECT * FROM Patrons";
@@ -237,6 +273,10 @@ public class AddPatronView extends javax.swing.JFrame {
         catch(SQLException e){
             e.printStackTrace();
         }
+        
+        MainView mv = new MainView();
+        mv.setVisible(true);
+        dispose();
         
     }//GEN-LAST:event_okButtonActionPerformed
 
