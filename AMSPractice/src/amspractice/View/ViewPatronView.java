@@ -39,10 +39,8 @@ public class ViewPatronView extends javax.swing.JFrame {
         accountTypeComboBox.addItemListener(new ItemListener(){
             
             public void itemStateChanged(ItemEvent e){
-                
                 if(e.getStateChange() == ItemEvent.SELECTED){
                     Object source = e.getSource();
-                    
                     if(source instanceof JComboBox){
                         JComboBox cb = (JComboBox) source;
                         
