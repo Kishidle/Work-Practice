@@ -11,12 +11,19 @@ package amspractice.Model;
  */
 public class Patron {
     
+    private int accID;
     private String fName, lName, sex, hPhone;
     private int accountType;
     public Patron(){
         
     }
 
+    public int getaccID(){
+        return accID;
+    }
+    public void setaccID(int accID){
+        this.accID = accID;
+    }
     public String getfName() {
         return fName;
     }

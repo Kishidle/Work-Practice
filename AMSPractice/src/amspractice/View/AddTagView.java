@@ -19,6 +19,8 @@ public class AddTagView extends javax.swing.JFrame {
         jTable1.getTableHeader().setReorderingAllowed(false);
         jTable2.getTableHeader().setReorderingAllowed(false);
         //jTable2.getColumnModel().getColumn(1).setPreferredWidth(35);
+        
+        //TODO add functionality for tag adding and the add vehicle button + right click functionality for viewing of vehicles
     }
 
     /**

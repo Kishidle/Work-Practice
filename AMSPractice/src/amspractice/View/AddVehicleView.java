@@ -16,6 +16,7 @@ public class AddVehicleView extends javax.swing.JFrame {
      */
     public AddVehicleView() {
         initComponents();
+        //TODO add sql statements for adding vehicle
     }
 
     /**

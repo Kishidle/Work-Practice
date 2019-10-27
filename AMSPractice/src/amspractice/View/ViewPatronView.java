@@ -5,6 +5,7 @@
  */
 package amspractice.View;
 
+import amspractice.Model.Patron;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.Connection;
@@ -12,6 +13,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,8 +26,13 @@ public class ViewPatronView extends javax.swing.JFrame {
     /**
      * Creates new form ViewPatronView
      */
+    
+    private ArrayList<Patron> patronList;
+    
     public ViewPatronView() {
         initComponents();
+        
+        patronList = new ArrayList<>();
         
         populateTable();
         
@@ -253,9 +260,9 @@ public class ViewPatronView extends javax.swing.JFrame {
         // TODO add your handling code here:
         // TODO get account_id in select statement for use in add tag and add vehicle view and right click functionality of view patron
         
-        int selectedIndex;
+        patronList.clear(); 
         String fName = "", lName = "", sex = "", hPhone = ""; 
-        String searchSQL = "SELECT account_type, first_name, last_name, sex, home_phone FROM Patrons ";
+        String searchSQL = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons ";
         switch(accountTypeComboBox.getSelectedIndex()){
             case 1: 
                 searchSQL = searchSQL.concat("WHERE account_type = 1"); 
@@ -302,6 +309,7 @@ public class ViewPatronView extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel) patronTable.getModel();
                 model.setRowCount(0);
                 while(rs.next()){
+                    //TODO add to Patron class to get the account id later
                     int accType = rs.getInt("account_type");
                     fName = rs.getString("first_name");
                     lName = rs.getString("last_name");
