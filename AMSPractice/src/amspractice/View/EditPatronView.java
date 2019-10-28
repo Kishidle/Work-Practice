@@ -6,6 +6,11 @@
 package amspractice.View;
 
 import amspractice.Model.Patron;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -72,7 +77,7 @@ public class EditPatronView extends javax.swing.JFrame {
         lNameTextField = new javax.swing.JTextField();
         hPhoneTextField = new javax.swing.JTextField();
         sexComboBox = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        editButton = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -116,10 +121,10 @@ public class EditPatronView extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Edit");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        editButton.setText("Edit");
+        editButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                editButtonActionPerformed(evt);
             }
         });
 
@@ -152,7 +157,7 @@ public class EditPatronView extends javax.swing.JFrame {
                 .addContainerGap(89, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
                 .addGap(12, 12, 12))
@@ -183,7 +188,7 @@ public class EditPatronView extends javax.swing.JFrame {
                 .addGap(33, 33, 33)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(editButton))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
@@ -217,9 +222,51 @@ public class EditPatronView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_accTypeComboBoxActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        
+        int accType = 0;
+        String sex = sexComboBox.getSelectedItem().toString();
+        String fName = fNameTextField.getText();
+        String lName = lNameTextField.getText();
+        String hPhone = hPhoneTextField.getText();
+        int accID = patron.getaccID();
+        try{
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        }
+        catch(ClassNotFoundException cnfe){
+            
+        }
+        
+        String connectionUrl = "jdbc:sqlserver://DESKTOP-83NBMNA:1433;databaseName=testArca;integratedSecurity=true";
+        try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
+            
+            switch(accTypeComboBox.getSelectedIndex()){
+                case 0: accType = 1; break;
+                case 1: accType = 2; break;
+                case 2: accType = 3; break;
+                case 3: accType = 4; break;
+                case 4: accType = 5; break;
+            }
+                  
+            String SQL = "UPDATE Patrons SET account_type = " + accType + ", first_name = '" + fName + "', last_name = '" + lName + "', sex = '" + sex + "', home_phone = '" + hPhone
+                    + "' WHERE account_id = " + accID;
+            
+            System.out.println(SQL);
+            
+            int x = stmt.executeUpdate(SQL);
+            if(x > 0){
+                JOptionPane.showMessageDialog(null, "Patron updated successfully");
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Patron not updated");
+            }
+        }
+        catch(SQLException sqle){
+            
+        }
+        
+    }//GEN-LAST:event_editButtonActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
@@ -262,9 +309,9 @@ public class EditPatronView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> accTypeComboBox;
+    private javax.swing.JButton editButton;
     private javax.swing.JTextField fNameTextField;
     private javax.swing.JTextField hPhoneTextField;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;

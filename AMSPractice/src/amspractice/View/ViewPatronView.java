@@ -20,6 +20,7 @@ import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -36,6 +37,7 @@ public class ViewPatronView extends javax.swing.JFrame {
     
     public ViewPatronView() {
         initComponents();
+        
         this.setTitle("View Patron(s)");
         patronList = new ArrayList<>();
         
@@ -154,8 +156,21 @@ public class ViewPatronView extends javax.swing.JFrame {
             new String [] {
                 "Account Type", "First Name", "Last Name", "Sex", "Home Phone"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(patronTable);
+        if (patronTable.getColumnModel().getColumnCount() > 0) {
+            patronTable.getColumnModel().getColumn(0).setResizable(false);
+            patronTable.getColumnModel().getColumn(1).setResizable(false);
+            patronTable.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         backButton.setText("Go back");
         backButton.addActionListener(new java.awt.event.ActionListener() {
@@ -194,13 +209,9 @@ public class ViewPatronView extends javax.swing.JFrame {
                             .addComponent(lNameTextField))
                         .addGap(20, 20, 20)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(3, 3, 3)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(hPhoneTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
                             .addComponent(sexTextField))
@@ -346,6 +357,8 @@ public class ViewPatronView extends javax.swing.JFrame {
     
     public void initTable(){
         
+        patronTable.getTableHeader().setReorderingAllowed(false);
+        patronTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         try{
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         }

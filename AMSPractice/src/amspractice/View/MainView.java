@@ -31,15 +31,8 @@ public class MainView extends javax.swing.JFrame {
         
         });
         
-        editPatronMenu.addActionListener(new ActionListener(){
-            
-            public void actionPerformed(ActionEvent e){
-                AddVehicleView avw = new AddVehicleView();
-                avw.setVisible(true);
-                dispose();
-            }
-        });
-        
+       
+ 
         viewPatronMenu.addActionListener(new ActionListener(){
             
             public void actionPerformed(ActionEvent e){
@@ -61,34 +54,42 @@ public class MainView extends javax.swing.JFrame {
 
         jMenuItem1 = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         amsMenu = new javax.swing.JMenu();
         addPatronMenu = new javax.swing.JMenuItem();
-        editPatronMenu = new javax.swing.JMenuItem();
         viewPatronMenu = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 64)); // NOI18N
+        jLabel1.setForeground(java.awt.Color.blue);
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("AMS");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 368, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(111, 111, 111)
+                .addComponent(jLabel1)
+                .addContainerGap(116, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 182, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addComponent(jLabel1)
+                .addContainerGap(59, Short.MAX_VALUE))
         );
 
         amsMenu.setText("Patron");
 
         addPatronMenu.setText("Add Patron");
         amsMenu.add(addPatronMenu);
-
-        editPatronMenu.setText("Edit Patron");
-        amsMenu.add(editPatronMenu);
 
         viewPatronMenu.setText("View Patron(s)");
         amsMenu.add(viewPatronMenu);
@@ -149,7 +150,7 @@ public class MainView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem addPatronMenu;
     private javax.swing.JMenu amsMenu;
-    private javax.swing.JMenuItem editPatronMenu;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
