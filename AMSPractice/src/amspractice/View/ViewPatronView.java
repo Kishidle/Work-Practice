@@ -6,6 +6,8 @@
 package amspractice.View;
 
 import amspractice.Model.Patron;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.Connection;
@@ -15,6 +17,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -31,10 +36,10 @@ public class ViewPatronView extends javax.swing.JFrame {
     
     public ViewPatronView() {
         initComponents();
-        
+        this.setTitle("View Patron(s)");
         patronList = new ArrayList<>();
         
-        populateTable();
+        initTable();
         
         accountTypeComboBox.addItemListener(new ItemListener(){
             
@@ -51,19 +56,20 @@ public class ViewPatronView extends javax.swing.JFrame {
                         
                         int selectedIndex = cb.getSelectedIndex();
                         String sql = "";
+                        //TODO just concat the account type
                         switch(selectedIndex){
                             case 0: 
-                                sql = "SELECT account_type, first_name, last_name, sex, home_phone FROM Patrons"; break;
+                                sql = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons"; break;
                             case 1: 
-                                sql = "SELECT account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 1"; break;
+                                sql = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 1"; break;
                             case 2: 
-                                sql = "SELECT account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 2"; break;
+                                sql = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 2"; break;
                             case 3: 
-                                sql = "SELECT account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 3"; break;
+                                sql = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 3"; break;
                             case 4: 
-                                sql = "SELECT account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 4"; break;
+                                sql = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 4"; break;
                             case 5: 
-                                sql = "SELECT account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 5"; break;
+                                sql = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 5"; break;
                         }
                         
                         try{
@@ -73,20 +79,24 @@ public class ViewPatronView extends javax.swing.JFrame {
                             
                         }
                         
-                        String connectionUrl = "jdbc:sqlserver://RAMON-PC\\SQLEXPRESS:49364;databaseName=testArca;integratedSecurity=true";
+                        String connectionUrl = "jdbc:sqlserver://DESKTOP-83NBMNA:1433;databaseName=testArca;integratedSecurity=true";
                         try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
                             ResultSet rs = stmt.executeQuery(sql);
                             
                             DefaultTableModel model = (DefaultTableModel) patronTable.getModel();
                             model.setRowCount(0);
+                            patronList.clear();
                             while(rs.next()){
-                                int accType = rs.getInt("account_type");
-                                String fName = rs.getString("first_name");
-                                String lName = rs.getString("last_name");
-                                String sex = rs.getString("sex");
-                                String hPhone = rs.getString("home_phone");
-                
-                            model.addRow(new Object[]{accType, fName, lName, sex, hPhone});
+                                Patron patron = new Patron();
+                                patron.setaccID(rs.getInt("account_id"));
+                                patron.setAccountType(rs.getInt("account_type"));
+                                patron.setfName(rs.getString("first_name"));
+                                patron.setlName(rs.getString("last_name"));
+                                patron.setSex(rs.getString("sex"));
+                                patron.sethPhone(rs.getString("home_phone"));
+                                patronList.add(patron);
+                                
+                                model.addRow(new Object[]{patron.getAccountType(), patron.getfName(), patron.getlName(), patron.getSex(), patron.gethPhone()});
                             }
                         }
                         catch(SQLException se){
@@ -301,20 +311,28 @@ public class ViewPatronView extends javax.swing.JFrame {
         System.out.println("searchSQL test");
         System.out.println(searchSQL);
         
-        String connectionUrl = "jdbc:sqlserver://RAMON-PC\\SQLEXPRESS:49364;databaseName=testArca;integratedSecurity=true";
+        String connectionUrl = "jdbc:sqlserver://DESKTOP-83NBMNA:1433;databaseName=testArca;integratedSecurity=true";
         try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
             ResultSet rs = stmt.executeQuery(searchSQL);
             DefaultTableModel model = (DefaultTableModel) patronTable.getModel();
                 model.setRowCount(0);
                 while(rs.next()){
                     //TODO add to Patron class to get the account id later
-                    int accType = rs.getInt("account_type");
+                    Patron patron = new Patron();
+                    patron.setaccID(rs.getInt("account_id"));
+                    patron.setAccountType(rs.getInt("account_type"));
+                    patron.setfName(rs.getString("first_name"));
+                    patron.setlName(rs.getString("last_name"));
+                    patron.setSex(rs.getString("sex"));
+                    patron.sethPhone(rs.getString("home_phone"));
+                    /*int accType = rs.getInt("account_type");
                     fName = rs.getString("first_name");
                     lName = rs.getString("last_name");
                     sex = rs.getString("sex");
-                    hPhone = rs.getString("home_phone");
-                
-                    model.addRow(new Object[]{accType, fName, lName, sex, hPhone});
+                    hPhone = rs.getString("home_phone");*/
+                    System.out.println(patron.getfName());
+                    patronList.add(patron);
+                    model.addRow(new Object[]{patron.getAccountType(), patron.getfName(), patron.getlName(), patron.getSex(), patron.gethPhone()});
                 }
         }
         catch(SQLException sqle){
@@ -326,7 +344,7 @@ public class ViewPatronView extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     
-    public void populateTable(){
+    public void initTable(){
         
         try{
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -335,23 +353,30 @@ public class ViewPatronView extends javax.swing.JFrame {
             
         }
         
-        String connectionUrl = "jdbc:sqlserver://RAMON-PC\\SQLEXPRESS:49364;databaseName=testArca;integratedSecurity=true";
+        String connectionUrl = "jdbc:sqlserver://DESKTOP-83NBMNA:1433;databaseName=testArca;integratedSecurity=true";
         
         try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
             //String SQL = "INSERT INTO Patrons VALUES(" + np.getAccountType() + ", '" + np.getfName() + "', '" + np.getlName() + "', '" + np.getSex() + "', '" + np.gethPhone() + "')";
             //String SQL = "SELECT * FROM Patrons";
-            String SQL = "SELECT account_type, first_name, last_name, sex, home_phone FROM Patrons";
+            String SQL = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons";
             ResultSet rs = stmt.executeQuery(SQL);
             
             DefaultTableModel model = (DefaultTableModel) patronTable.getModel();
             while(rs.next()){
-                int accType = rs.getInt("account_type");
+                Patron patron = new Patron();
+                patron.setaccID(rs.getInt("account_id"));
+                patron.setAccountType(rs.getInt("account_type"));
+                patron.setfName(rs.getString("first_name"));
+                patron.setlName(rs.getString("last_name"));
+                patron.setSex(rs.getString("sex"));
+                patron.sethPhone(rs.getString("home_phone"));
+                /*int accType = rs.getInt("account_type");
                 String fName = rs.getString("first_name");
                 String lName = rs.getString("last_name");
                 String sex = rs.getString("sex");
-                String hPhone = rs.getString("home_phone");
-                
-                model.addRow(new Object[]{accType, fName, lName, sex, hPhone});
+                String hPhone = rs.getString("home_phone");*/
+                patronList.add(patron);
+                model.addRow(new Object[]{patron.getAccountType(), patron.getfName(), patron.getlName(), patron.getSex(), patron.gethPhone()});
             }
             //int x = stmt.executeUpdate(SQL);
             int x = 1;
@@ -369,6 +394,23 @@ public class ViewPatronView extends javax.swing.JFrame {
         catch(SQLException e){
             e.printStackTrace();
         }
+        
+        final JPopupMenu popupMenu = new JPopupMenu();
+        JMenuItem editPatron = new JMenuItem("Edit Patron");
+        editPatron.addActionListener(new ActionListener(){
+           
+            @Override
+            public void actionPerformed(ActionEvent e){
+                int index = patronTable.getSelectedRow();
+                EditPatronView epv = new EditPatronView(patronList.get(index));
+                epv.setVisible(true);
+                dispose();
+            }
+        });
+        popupMenu.add(editPatron);
+        JMenuItem addTag = new JMenuItem("Add Tag to Patron");
+        patronTable.setComponentPopupMenu(popupMenu);
+        
     }
     
     public static void main(String args[]) {

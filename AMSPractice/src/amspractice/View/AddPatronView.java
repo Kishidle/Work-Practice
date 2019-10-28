@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -30,7 +31,7 @@ public class AddPatronView extends javax.swing.JFrame {
     
     public AddPatronView() {
         initComponents();
-        
+        this.setTitle("Add Patron");
         initializeComboBox();
     }
     
@@ -222,6 +223,10 @@ public class AddPatronView extends javax.swing.JFrame {
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         // TODO add your handling code here:
+        
+        MainView mv = new MainView();
+        mv.setVisible(true);
+        dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
@@ -249,7 +254,7 @@ public class AddPatronView extends javax.swing.JFrame {
         }
         
         
-        String connectionUrl = "jdbc:sqlserver://RAMON-PC\\SQLEXPRESS:49364;databaseName=testArca;integratedSecurity=true";
+        String connectionUrl = "jdbc:sqlserver://DESKTOP-83NBMNA:1433;databaseName=testArca;integratedSecurity=true";
         try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
             String SQL = "INSERT INTO Patrons VALUES(" + np.getAccountType() + ", '" + np.getfName() + "', '" + np.getlName() + "', '" + np.getSex() + "', '" + np.gethPhone() + "')";
             //String SQL = "SELECT * FROM Patrons";
@@ -261,9 +266,12 @@ public class AddPatronView extends javax.swing.JFrame {
             //int x = 1;
             if(x > 0){
                 System.out.print("Patron registered successfully");
+                JOptionPane.showMessageDialog(null, "Patron registered successfully.");
             }
             else{
                 System.out.print("Patron not registered");
+                JOptionPane.showMessageDialog(null, "Patron not registered.");
+                
             }
             
             System.out.println("x");
@@ -274,9 +282,11 @@ public class AddPatronView extends javax.swing.JFrame {
             e.printStackTrace();
         }
         
-        MainView mv = new MainView();
-        mv.setVisible(true);
-        dispose();
+        fNameTextField.setText("");
+        laNameTextField.setText("");
+        hPhoneTextField.setText("");
+        typeComboBox.setSelectedIndex(0);
+        
         
     }//GEN-LAST:event_okButtonActionPerformed
 

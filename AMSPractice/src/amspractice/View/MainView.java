@@ -19,7 +19,7 @@ public class MainView extends javax.swing.JFrame {
      */
     public MainView() {
         initComponents();
-        
+        this.setTitle("Account and Management System");
         
         addPatronMenu.addActionListener(new ActionListener(){
             
