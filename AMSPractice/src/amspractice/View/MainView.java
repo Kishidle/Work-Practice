@@ -7,6 +7,9 @@ package amspractice.View;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -19,6 +22,24 @@ public class MainView extends javax.swing.JFrame {
      */
     public MainView() {
         initComponents();
+        
+        /*try {
+            // Set System L&F
+        UIManager.setLookAndFeel(
+            UIManager.getSystemLookAndFeelClassName());
+        } 
+        catch (UnsupportedLookAndFeelException e) {
+       // handle exception
+        }
+        catch (ClassNotFoundException e) {
+       // handle exception
+        }
+        catch (InstantiationException e) {
+       // handle exception
+        }
+        catch (IllegalAccessException e) {
+       // handle exception
+        }*/
         this.setTitle("Account and Management System");
         
         addPatronMenu.addActionListener(new ActionListener(){

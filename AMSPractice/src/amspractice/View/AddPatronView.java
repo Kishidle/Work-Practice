@@ -5,6 +5,7 @@
  */
 package amspractice.View;
 
+import amspractice.Controller.SQLConnection;
 import amspractice.Model.Patron;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -25,13 +26,15 @@ public class AddPatronView extends javax.swing.JFrame {
     /**
      * Creates new form AddPatronView
      */
-    
+    private SQLConnection sqlCon;
     private String fName, lName, sex, hPhone;
     private int accountType;
     
     public AddPatronView() {
         initComponents();
+        sqlCon = new SQLConnection();
         this.setTitle("Add Patron");
+        
         initializeComboBox();
     }
     
@@ -246,16 +249,7 @@ public class AddPatronView extends javax.swing.JFrame {
         
         System.out.println(np.getfName() + " " + np.getlName());
         
-        try{
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        }
-        catch(ClassNotFoundException e){
-            
-        }
-        
-        
-        String connectionUrl = "jdbc:sqlserver://DESKTOP-83NBMNA:1433;databaseName=testArca;integratedSecurity=true";
-        try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
+        try(Connection conn = sqlCon.getConnection(); Statement stmt = conn.createStatement();){
             String SQL = "INSERT INTO Patrons VALUES(" + np.getAccountType() + ", '" + np.getfName() + "', '" + np.getlName() + "', '" + np.getSex() + "', '" + np.gethPhone() + "')";
             //String SQL = "SELECT * FROM Patrons";
             /*ResultSet rs = stmt.executeQuery(SQL);

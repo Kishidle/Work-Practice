@@ -5,6 +5,7 @@
  */
 package amspractice.View;
 
+import amspractice.Controller.SQLConnection;
 import amspractice.Model.Patron;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,7 +15,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Jonas
+ * @author Ramon
  */
 public class EditPatronView extends javax.swing.JFrame {
 
@@ -22,11 +23,13 @@ public class EditPatronView extends javax.swing.JFrame {
      * Creates new form EditPatronView
      */
     private Patron patron;
+    private SQLConnection sqlCon;
     public EditPatronView(){
         
     }
     public EditPatronView(Patron patron) {
         initComponents();
+        sqlCon = new SQLConnection();
         this.setTitle("Edit Patron");
         this.patron = patron;
         
@@ -34,7 +37,7 @@ public class EditPatronView extends javax.swing.JFrame {
     }
     
     public void initEdit(){
-        System.out.print(patron.getAccountType());
+        
         switch(patron.getAccountType()){
             case 1: accTypeComboBox.setSelectedIndex(0); break;
             case 2: accTypeComboBox.setSelectedIndex(1); break;
@@ -78,12 +81,15 @@ public class EditPatronView extends javax.swing.JFrame {
         hPhoneTextField = new javax.swing.JTextField();
         sexComboBox = new javax.swing.JComboBox<>();
         editButton = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(422, 300));
+        setPreferredSize(new java.awt.Dimension(422, 329));
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(422, 350));
 
         jLabel1.setText("Account Type:");
 
@@ -128,44 +134,52 @@ public class EditPatronView extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Cancel");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                cancelButtonActionPerformed(evt);
             }
         });
+
+        jLabel6.setForeground(java.awt.Color.red);
+        jLabel6.setText("Please edit the fields you want to change");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(hPhoneTextField)
-                    .addComponent(lNameTextField)
-                    .addComponent(fNameTextField)
-                    .addComponent(accTypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sexComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(89, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(cancelButton)
                 .addGap(12, 12, 12))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(hPhoneTextField)
+                            .addComponent(lNameTextField)
+                            .addComponent(fNameTextField)
+                            .addComponent(accTypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(sexComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(accTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -187,9 +201,9 @@ public class EditPatronView extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addGap(33, 33, 33)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
+                    .addComponent(cancelButton)
                     .addComponent(editButton))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -200,7 +214,7 @@ public class EditPatronView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
         );
 
         pack();
@@ -231,15 +245,8 @@ public class EditPatronView extends javax.swing.JFrame {
         String lName = lNameTextField.getText();
         String hPhone = hPhoneTextField.getText();
         int accID = patron.getaccID();
-        try{
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        }
-        catch(ClassNotFoundException cnfe){
-            
-        }
-        
-        String connectionUrl = "jdbc:sqlserver://DESKTOP-83NBMNA:1433;databaseName=testArca;integratedSecurity=true";
-        try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
+    
+        try(Connection conn = sqlCon.getConnection(); Statement stmt = conn.createStatement();){
             
             switch(accTypeComboBox.getSelectedIndex()){
                 case 0: accType = 1; break;
@@ -250,13 +257,16 @@ public class EditPatronView extends javax.swing.JFrame {
             }
                   
             String SQL = "UPDATE Patrons SET account_type = " + accType + ", first_name = '" + fName + "', last_name = '" + lName + "', sex = '" + sex + "', home_phone = '" + hPhone
-                    + "' WHERE account_id = " + accID;
+                    + "' WHERE patron_id = " + accID;
             
             System.out.println(SQL);
             
             int x = stmt.executeUpdate(SQL);
             if(x > 0){
-                JOptionPane.showMessageDialog(null, "Patron updated successfully");
+                JOptionPane.showMessageDialog(null, "Patron updated successfully. Returning to View Patron");
+                ViewPatronView vpv = new ViewPatronView();
+                vpv.setVisible(true);
+                dispose();
             }
             else{
                 JOptionPane.showMessageDialog(null, "Patron not updated");
@@ -268,9 +278,13 @@ public class EditPatronView extends javax.swing.JFrame {
         
     }//GEN-LAST:event_editButtonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        
+        ViewPatronView vpv = new ViewPatronView();
+        vpv.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -309,16 +323,17 @@ public class EditPatronView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> accTypeComboBox;
+    private javax.swing.JButton cancelButton;
     private javax.swing.JButton editButton;
     private javax.swing.JTextField fNameTextField;
     private javax.swing.JTextField hPhoneTextField;
-    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField lNameTextField;
     private javax.swing.JComboBox<String> sexComboBox;

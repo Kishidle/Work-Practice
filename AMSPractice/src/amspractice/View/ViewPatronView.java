@@ -5,6 +5,7 @@
  */
 package amspractice.View;
 
+import amspractice.Controller.SQLConnection;
 import amspractice.Model.Patron;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,10 +35,10 @@ public class ViewPatronView extends javax.swing.JFrame {
      */
     
     private ArrayList<Patron> patronList;
-    
+    private SQLConnection sqlCon;
     public ViewPatronView() {
         initComponents();
-        
+        sqlCon = new SQLConnection();
         this.setTitle("View Patron(s)");
         patronList = new ArrayList<>();
         
@@ -61,28 +62,23 @@ public class ViewPatronView extends javax.swing.JFrame {
                         //TODO just concat the account type
                         switch(selectedIndex){
                             case 0: 
-                                sql = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons"; break;
+                                sql = "SELECT patron_id, account_type, first_name, last_name, sex, home_phone FROM Patrons"; break;
                             case 1: 
-                                sql = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 1"; break;
+                                sql = "SELECT patron_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 1"; break;
                             case 2: 
-                                sql = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 2"; break;
+                                sql = "SELECT patron_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 2"; break;
                             case 3: 
-                                sql = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 3"; break;
+                                sql = "SELECT patron_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 3"; break;
                             case 4: 
-                                sql = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 4"; break;
+                                sql = "SELECT patron_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 4"; break;
                             case 5: 
-                                sql = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 5"; break;
+                                sql = "SELECT patron_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = 5"; break;
                         }
                         
-                        try{
-                            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                        }
-                        catch(ClassNotFoundException x){
-                            
-                        }
                         
-                        String connectionUrl = "jdbc:sqlserver://DESKTOP-83NBMNA:1433;databaseName=testArca;integratedSecurity=true";
-                        try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
+                        
+                        
+                        try(Connection conn = sqlCon.getConnection(); Statement stmt = conn.createStatement();){
                             ResultSet rs = stmt.executeQuery(sql);
                             
                             DefaultTableModel model = (DefaultTableModel) patronTable.getModel();
@@ -90,7 +86,7 @@ public class ViewPatronView extends javax.swing.JFrame {
                             patronList.clear();
                             while(rs.next()){
                                 Patron patron = new Patron();
-                                patron.setaccID(rs.getInt("account_id"));
+                                patron.setaccID(rs.getInt("patron_id"));
                                 patron.setAccountType(rs.getInt("account_type"));
                                 patron.setfName(rs.getString("first_name"));
                                 patron.setlName(rs.getString("last_name"));
@@ -277,11 +273,11 @@ public class ViewPatronView extends javax.swing.JFrame {
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         // TODO add your handling code here:
-        // TODO get account_id in select statement for use in add tag and add vehicle view and right click functionality of view patron
+        // TODO get patron_id in select statement for use in add tag and add vehicle view and right click functionality of view patron
         
         patronList.clear(); 
         String fName = "", lName = "", sex = "", hPhone = ""; 
-        String searchSQL = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons ";
+        String searchSQL = "SELECT patron_id, account_type, first_name, last_name, sex, home_phone FROM Patrons ";
         switch(accountTypeComboBox.getSelectedIndex()){
             case 1: 
                 searchSQL = searchSQL.concat("WHERE account_type = 1"); 
@@ -313,24 +309,18 @@ public class ViewPatronView extends javax.swing.JFrame {
         
         searchSQL = searchSQL.concat("first_name LIKE '" + fName + "%' AND last_name LIKE '" + lName + "%' AND sex LIKE '" + sex + "%' AND home_phone LIKE '" + hPhone + "%'");
         
-        try{
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");   
-        }
-        catch(ClassNotFoundException cnfe){
-            
-        }
         System.out.println("searchSQL test");
         System.out.println(searchSQL);
         
-        String connectionUrl = "jdbc:sqlserver://DESKTOP-83NBMNA:1433;databaseName=testArca;integratedSecurity=true";
-        try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
+       
+        try(Connection conn = sqlCon.getConnection(); Statement stmt = conn.createStatement();){
             ResultSet rs = stmt.executeQuery(searchSQL);
             DefaultTableModel model = (DefaultTableModel) patronTable.getModel();
                 model.setRowCount(0);
                 while(rs.next()){
                     //TODO add to Patron class to get the account id later
                     Patron patron = new Patron();
-                    patron.setaccID(rs.getInt("account_id"));
+                    patron.setaccID(rs.getInt("patron_id"));
                     patron.setAccountType(rs.getInt("account_type"));
                     patron.setfName(rs.getString("first_name"));
                     patron.setlName(rs.getString("last_name"));
@@ -359,25 +349,19 @@ public class ViewPatronView extends javax.swing.JFrame {
         
         patronTable.getTableHeader().setReorderingAllowed(false);
         patronTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        try{
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        }
-        catch(ClassNotFoundException e){
-            
-        }
         
-        String connectionUrl = "jdbc:sqlserver://DESKTOP-83NBMNA:1433;databaseName=testArca;integratedSecurity=true";
         
-        try(Connection conn = DriverManager.getConnection(connectionUrl); Statement stmt = conn.createStatement();){
+        
+        try(Connection conn = sqlCon.getConnection(); Statement stmt = conn.createStatement();){
             //String SQL = "INSERT INTO Patrons VALUES(" + np.getAccountType() + ", '" + np.getfName() + "', '" + np.getlName() + "', '" + np.getSex() + "', '" + np.gethPhone() + "')";
             //String SQL = "SELECT * FROM Patrons";
-            String SQL = "SELECT account_id, account_type, first_name, last_name, sex, home_phone FROM Patrons";
+            String SQL = "SELECT patron_id, account_type, first_name, last_name, sex, home_phone FROM Patrons";
             ResultSet rs = stmt.executeQuery(SQL);
             
             DefaultTableModel model = (DefaultTableModel) patronTable.getModel();
             while(rs.next()){
                 Patron patron = new Patron();
-                patron.setaccID(rs.getInt("account_id"));
+                patron.setaccID(rs.getInt("patron_id"));
                 patron.setAccountType(rs.getInt("account_type"));
                 patron.setfName(rs.getString("first_name"));
                 patron.setlName(rs.getString("last_name"));
