@@ -11,33 +11,45 @@ package amspractice.Model;
  */
 public class Tag {
     
-    private String entryType, fromLoc, toLoc;
+    private int tagID, tagNumber, vehicleID;
+    private String tagStatus;
+    
     public Tag(){
         
     }
 
-    public String getEntryType() {
-        return entryType;
+    public int getTagID() {
+        return tagID;
     }
 
-    public void setEntryType(String entryType) {
-        this.entryType = entryType;
+    public void setTagID(int tagID) {
+        this.tagID = tagID;
     }
 
-    public String getFromLoc() {
-        return fromLoc;
+    public int getTagNumber() {
+        return tagNumber;
     }
 
-    public void setFromLoc(String fromLoc) {
-        this.fromLoc = fromLoc;
+    public void setTagNumber(int tagNumber) {
+        this.tagNumber = tagNumber;
     }
 
-    public String getToLoc() {
-        return toLoc;
+    public int getVehicleID() {
+        return vehicleID;
     }
 
-    public void setToLoc(String toLoc) {
-        this.toLoc = toLoc;
+    public void setVehicleID(int vehicleID) {
+        this.vehicleID = vehicleID;
     }
+
+    public String getTagStatus() {
+        return tagStatus;
+    }
+
+    public void setTagStatus(String tagStatus) {
+        this.tagStatus = tagStatus;
+    }
+    
+    
     
 }

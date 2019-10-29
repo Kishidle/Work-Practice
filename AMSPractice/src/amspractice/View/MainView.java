@@ -62,6 +62,16 @@ public class MainView extends javax.swing.JFrame {
                 dispose();
             }
         });
+        
+        tagMenu.addActionListener(new ActionListener(){
+            
+            public void actionPerformed(ActionEvent e){
+                TagVehicleView atv = new TagVehicleView();
+                atv.setVisible(true);
+                dispose();
+            }
+        });
+        
     }
 
     /**
@@ -73,15 +83,17 @@ public class MainView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         amsMenu = new javax.swing.JMenu();
         addPatronMenu = new javax.swing.JMenuItem();
         viewPatronMenu = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        tagMenu = new javax.swing.JMenuItem();
 
-        jMenuItem1.setText("jMenuItem1");
+        jMenu1.setText("jMenu1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -116,6 +128,13 @@ public class MainView extends javax.swing.JFrame {
         amsMenu.add(viewPatronMenu);
 
         jMenuBar1.add(amsMenu);
+
+        jMenu2.setText("Tag");
+
+        tagMenu.setText("Tag Menu");
+        jMenu2.add(tagMenu);
+
+        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -172,9 +191,11 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JMenuItem addPatronMenu;
     private javax.swing.JMenu amsMenu;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JMenuItem tagMenu;
     private javax.swing.JMenuItem viewPatronMenu;
     // End of variables declaration//GEN-END:variables
 }

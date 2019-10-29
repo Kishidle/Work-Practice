@@ -5,18 +5,27 @@
  */
 package amspractice.View;
 
+import amspractice.Model.Tag;
+
 /**
  *
  * @author Ramon
  */
-public class AddVehicleView extends javax.swing.JFrame {
+public class AddTagVehicleView extends javax.swing.JFrame {
 
     /**
      * Creates new form AddVehicle
      */
-    public AddVehicleView() {
+    private Tag tag;
+    
+    public AddTagVehicleView(){
         initComponents();
-        //TODO add sql statements for adding vehicle
+    }
+    
+    public void initFields(){
+        //tagNumberTextField.setText(Integer.toString(tag.getTagNumber()));
+        tagNumberTextField.setEditable(false);
+        
     }
 
     /**
@@ -30,9 +39,8 @@ public class AddVehicleView extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        tagComboBox = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        plateTextField = new javax.swing.JTextField();
+        plateNumberTextField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         makeTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -43,13 +51,12 @@ public class AddVehicleView extends javax.swing.JFrame {
         colorTextField = new javax.swing.JTextField();
         saveButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
+        tagNumberTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setForeground(new java.awt.Color(255, 0, 0));
         jLabel1.setText("Tag Number:");
-
-        tagComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel2.setForeground(new java.awt.Color(255, 0, 0));
         jLabel2.setText("Plate Number:");
@@ -87,51 +94,45 @@ public class AddVehicleView extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(58, 58, 58)
-                        .addComponent(colorTextField)
-                        .addContainerGap())
+                        .addComponent(colorTextField))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
-                        .addComponent(tagComboBox, 0, 201, Short.MAX_VALUE)
-                        .addGap(7, 7, 7))
+                        .addComponent(tagNumberTextField))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(11, 11, 11)
-                        .addComponent(plateTextField)
-                        .addContainerGap())
+                        .addComponent(plateNumberTextField))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(57, 57, 57)
-                        .addComponent(makeTextField)
-                        .addContainerGap())
+                        .addComponent(makeTextField))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(54, 54, 54)
-                        .addComponent(modelTextField)
-                        .addContainerGap())
+                        .addComponent(modelTextField))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(62, 62, 62)
-                        .addComponent(yearTextField)
-                        .addContainerGap())))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(cancelButton)
+                        .addComponent(yearTextField))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 153, Short.MAX_VALUE)
+                        .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1)
+                        .addComponent(cancelButton)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(tagNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tagComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(plateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(plateNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -197,21 +198,27 @@ public class AddVehicleView extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddVehicleView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddTagVehicleView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddVehicleView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddTagVehicleView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddVehicleView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddTagVehicleView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddVehicleView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddTagVehicleView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddVehicleView().setVisible(true);
+                new AddTagVehicleView().setVisible(true);
             }
         });
     }
@@ -228,9 +235,9 @@ public class AddVehicleView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField makeTextField;
     private javax.swing.JTextField modelTextField;
-    private javax.swing.JTextField plateTextField;
+    private javax.swing.JTextField plateNumberTextField;
     private javax.swing.JButton saveButton;
-    private javax.swing.JComboBox<String> tagComboBox;
+    private javax.swing.JTextField tagNumberTextField;
     private javax.swing.JTextField yearTextField;
     // End of variables declaration//GEN-END:variables
 }
