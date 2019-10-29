@@ -9,6 +9,7 @@ import amspractice.Controller.SQLConnection;
 import amspractice.Model.Patron;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
@@ -245,8 +246,10 @@ public class EditPatronView extends javax.swing.JFrame {
         String lName = lNameTextField.getText();
         String hPhone = hPhoneTextField.getText();
         int accID = patron.getaccID();
+        
+        String pSQL = "UPDATE Patrons SET account_type = ?, first_name = ?, last_name = ?, sex = ?, home_phone = ? WHERE patron_id = ?";
     
-        try(Connection conn = sqlCon.getConnection(); Statement stmt = conn.createStatement();){
+        try(Connection conn = sqlCon.getConnection(); PreparedStatement stmt = conn.prepareStatement(pSQL)){
             
             switch(accTypeComboBox.getSelectedIndex()){
                 case 0: accType = 1; break;
@@ -255,13 +258,20 @@ public class EditPatronView extends javax.swing.JFrame {
                 case 3: accType = 4; break;
                 case 4: accType = 5; break;
             }
-                  
+                 
+            //TODO switch to preparedStatements
+            stmt.setInt(1, accType);
+            stmt.setString(2, fName);
+            stmt.setString(3, lName);
+            stmt.setString(4, sex);
+            stmt.setString(5, hPhone);
+            stmt.setInt(6, accID);
             String SQL = "UPDATE Patrons SET account_type = " + accType + ", first_name = '" + fName + "', last_name = '" + lName + "', sex = '" + sex + "', home_phone = '" + hPhone
                     + "' WHERE patron_id = " + accID;
-            
+            System.out.println("SQL2 : " + pSQL);
             System.out.println(SQL);
             
-            int x = stmt.executeUpdate(SQL);
+            int x = stmt.executeUpdate();
             if(x > 0){
                 JOptionPane.showMessageDialog(null, "Patron updated successfully. Returning to View Patron");
                 ViewPatronView vpv = new ViewPatronView();
