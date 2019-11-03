@@ -108,7 +108,7 @@ public class TagVehicleView extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e){
                 int index = patronTable.getSelectedRow();
-                AddTagVehicleView avv = new AddTagVehicleView();
+                AddTagVehicleView avv = new AddTagVehicleView(patronList.get(index));
                 avv.setVisible(true);
             }
             
