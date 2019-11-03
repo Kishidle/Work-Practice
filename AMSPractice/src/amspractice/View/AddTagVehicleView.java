@@ -5,8 +5,15 @@
  */
 package amspractice.View;
 
+import amspractice.Controller.SQLConnection;
 import amspractice.Model.Patron;
 import amspractice.Model.Tag;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,19 +25,48 @@ public class AddTagVehicleView extends javax.swing.JFrame {
      * Creates new form AddVehicle
      */
     private Patron patron;
+    private SQLConnection sqlConn;
+    private boolean hasTag = false;
+    //private ArrayList<Tag> tagList;
+    
     
     public AddTagVehicleView(Patron patron){
-        this.patron = patron;
         initComponents();
+        this.patron = patron;
+        
+        sqlConn = new SQLConnection();
+        //tagList = new ArrayList<>();
         patronLabel.setText(patron.getfName() + " " + patron.getlName());
+        
     }
     public AddTagVehicleView(){
         initComponents();
         //patronLabel.setText(patron.getfName() + " " + patron.getlName());
     }
     
+    //TODO add checking of tag_status 
+    public void checkTagNumberExists(){
+        int tag = Integer.parseInt(tagNumberTextField.getText());
+        String query = "SELECT tag_number FROM Tags WHERE tag_number = ?";
+        
+        try(Connection conn = sqlConn.getConnection(); PreparedStatement stmt = conn.prepareStatement(query);){
+            stmt.setInt(1, tag);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                hasTag = true;
+                JOptionPane.showMessageDialog(null, "Tag exists");
+            }
+            if(!hasTag){
+                JOptionPane.showMessageDialog(null, "Tag does not exist");
+                
+                return;
+            }
+        }
+        catch(SQLException sqle){
+            
+        }
+    }
     
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -56,6 +92,7 @@ public class AddTagVehicleView extends javax.swing.JFrame {
         cancelButton = new javax.swing.JButton();
         tagNumberTextField = new javax.swing.JTextField();
         patronLabel = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,6 +127,8 @@ public class AddTagVehicleView extends javax.swing.JFrame {
 
         patronLabel.setText("jLabel7");
 
+        jButton1.setText("Check");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -100,11 +139,7 @@ public class AddTagVehicleView extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(58, 58, 58)
-                        .addComponent(colorTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(tagNumberTextField))
+                        .addComponent(colorTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(11, 11, 11)
@@ -123,11 +158,19 @@ public class AddTagVehicleView extends javax.swing.JFrame {
                         .addComponent(yearTextField))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancelButton))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cancelButton))
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(patronLabel)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(patronLabel)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(tagNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -136,11 +179,12 @@ public class AddTagVehicleView extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(patronLabel)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(tagNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
+                    .addComponent(tagNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addGap(16, 16, 16)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(plateNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -164,7 +208,7 @@ public class AddTagVehicleView extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(saveButton)
                     .addComponent(cancelButton))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -235,6 +279,7 @@ public class AddTagVehicleView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField colorTextField;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

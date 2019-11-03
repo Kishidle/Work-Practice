@@ -47,12 +47,12 @@ public class TagVehicleView extends javax.swing.JFrame {
         patronTable.getTableHeader().setReorderingAllowed(false);
         patronTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
-        populateTagTable();
+        populatePatronTable();
         //jTable2.getColumnModel().getColumn(1).setPreferredWidth(35);
         
         //TODO add functionality for tag adding and the add vehicle button + right click functionality for viewing of vehicles
     }
-    public void populateTagTable(){
+    public void populatePatronTable(){
         
         //TODO only query patrons with no tag yet
         
@@ -102,14 +102,14 @@ public class TagVehicleView extends javax.swing.JFrame {
         }
         
         final JPopupMenu tagPopupMenu = new JPopupMenu();
-        JMenuItem addVehicle = new JMenuItem("Add Vehicle to Tag");
+        JMenuItem addVehicle = new JMenuItem("Add Tag to Patron");
         addVehicle.addActionListener(new ActionListener(){
             
             @Override
             public void actionPerformed(ActionEvent e){
                 int index = patronTable.getSelectedRow();
-                AddTagVehicleView avv = new AddTagVehicleView(patronList.get(index));
-                avv.setVisible(true);
+                AddTagVehicleView atvv = new AddTagVehicleView(patronList.get(index));
+                atvv.setVisible(true);
             }
             
         });
