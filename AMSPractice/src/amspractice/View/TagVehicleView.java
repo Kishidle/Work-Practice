@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -117,6 +119,63 @@ public class TagVehicleView extends javax.swing.JFrame {
         tagPopupMenu.add(addVehicle);
         patronTable.setComponentPopupMenu(tagPopupMenu);
         
+        patronTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            
+            public void valueChanged(ListSelectionEvent e){
+                
+                if(e.getValueIsAdjusting()){
+                    //System.out.println(patronTable.getValueAt(patronTable.getSelectedRow(), 0).toString());
+                    int selectedRow = patronTable.getSelectedRow();
+                    
+                    String query = "SELECT V.vehicle_id FROM Vehicles V INNER JOIN Patrons P ON V.vehicle_id = P.vehicle_id WHERE P.patron_id = ?";
+                    try(Connection conn = sqlCon.getConnection(); PreparedStatement stmt = conn.prepareStatement(query);){
+                        stmt.setInt(1, patronList.get(selectedRow).getaccID());
+                        ResultSet rs = stmt.executeQuery();
+                        
+                        DefaultTableModel model = (DefaultTableModel) carTable.getModel();
+                        model.setRowCount(0);
+                        System.out.println("try test");
+                        while(rs.next()){
+                             Vehicle vehicle = new Vehicle();
+                             vehicle.setVehicleID(rs.getInt("vehicle_id"));
+                             vehicleList.add(vehicle);
+                             
+                             model.addRow(new Object[]{vehicle.getVehicleID()});
+                        }
+                        rs.close();
+                    }
+                    catch(SQLException sqle){
+                        
+                    }
+                    
+                    query = "SELECT T.tag_id, T.tag_number FROM Tags T INNER JOIN Vehicles V ON T.vehicle_id = V.vehicle_id WHERE V.vehicle_id = ?";
+                    try(Connection conn = sqlCon.getConnection(); PreparedStatement stmt = conn.prepareStatement(query);){
+                        DefaultTableModel model = (DefaultTableModel) tagTable.getModel();
+                        model.setRowCount(0);
+                        //System.out.println(vehicleList.size());
+                        for(int n = 0; n < vehicleList.size(); n++){
+                            
+                            stmt.setInt(1, vehicleList.get(n).getVehicleID());
+                            ResultSet rs = stmt.executeQuery();
+                            System.out.println("tag testaaaaaaaaa");
+                            while(rs.next()){
+                                Tag tag = new Tag();
+                                tag.setTagID(rs.getInt("tag_id"));
+                                tag.setTagNumber(rs.getInt("tag_number"));
+                                
+                                model.addRow(new Object[]{tag.getTagNumber()});
+                            }
+                            rs.close();
+                        }
+                    }
+                    catch(SQLException sqle){
+                        
+                    }
+                }
+                
+            }
+        });
+        
     }
 
     /**
@@ -135,7 +194,7 @@ public class TagVehicleView extends javax.swing.JFrame {
         carTable = new javax.swing.JTable();
         exitButton = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tagTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -185,7 +244,7 @@ public class TagVehicleView extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tagTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -201,9 +260,9 @@ public class TagVehicleView extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
+        jScrollPane3.setViewportView(tagTable);
+        if (tagTable.getColumnModel().getColumnCount() > 0) {
+            tagTable.getColumnModel().getColumn(0).setResizable(false);
         }
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -300,7 +359,7 @@ public class TagVehicleView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable patronTable;
+    private javax.swing.JTable tagTable;
     // End of variables declaration//GEN-END:variables
 }

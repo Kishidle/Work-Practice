@@ -26,7 +26,9 @@ public class AddTagVehicleView extends javax.swing.JFrame {
      */
     private Patron patron;
     private SQLConnection sqlConn;
-    private boolean hasTag = false;
+    private boolean hasTag;
+    private Tag tag;
+    private int vehicleID;
     //private ArrayList<Tag> tagList;
     
     
@@ -44,27 +46,53 @@ public class AddTagVehicleView extends javax.swing.JFrame {
         //patronLabel.setText(patron.getfName() + " " + patron.getlName());
     }
     
-    //TODO add checking of tag_status 
-    public void checkTagNumberExists(){
-        int tag = Integer.parseInt(tagNumberTextField.getText());
-        String query = "SELECT tag_number FROM Tags WHERE tag_number = ?";
+    
+    public Tag checkTagNumberExists(){
+        hasTag = false;
+        int tagNum = Integer.parseInt(tagNumberTextField.getText());
+        String query = "SELECT tag_id, tag_number, tag_status FROM Tags WHERE tag_number = ?";
         
         try(Connection conn = sqlConn.getConnection(); PreparedStatement stmt = conn.prepareStatement(query);){
-            stmt.setInt(1, tag);
+            stmt.setInt(1, tagNum);
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
                 hasTag = true;
-                JOptionPane.showMessageDialog(null, "Tag exists");
+                if(rs.getString("tag_status").equals("NOT_ASSIGNED")){
+                    JOptionPane.showMessageDialog(null, "Tag is available.");
+                    tag = new Tag();
+                    tag.setTagID(rs.getInt("tag_id"));
+                    tag.setTagNumber(rs.getInt("tag_number"));
+                    tag.setTagStatus(rs.getString("tag_status"));
+                    rs.close();
+                    return tag;
+                    /*
+                    int confirm = JOptionPane.showConfirmDialog(null, "Would you like to use this tag?");
+                    if(confirm == JOptionPane.YES_OPTION){
+                        tagNumberTextField.setEditable(false);
+                    }
+                    else{
+                        tagNumberTextField.setText("");
+                    }*/
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Tag is already in use.");
+                    tagNumberTextField.setText("");
+                    return null;
+                }
+                
             }
             if(!hasTag){
                 JOptionPane.showMessageDialog(null, "Tag does not exist");
-                
-                return;
+                tagNumberTextField.setText("");
+                return null;
             }
+            
         }
         catch(SQLException sqle){
             
         }
+        
+        return null;
     }
     
     /**
@@ -92,7 +120,6 @@ public class AddTagVehicleView extends javax.swing.JFrame {
         cancelButton = new javax.swing.JButton();
         tagNumberTextField = new javax.swing.JTextField();
         patronLabel = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -125,9 +152,13 @@ public class AddTagVehicleView extends javax.swing.JFrame {
 
         cancelButton.setText("Cancel");
 
-        patronLabel.setText("jLabel7");
+        tagNumberTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tagNumberTextFieldActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText("Check");
+        patronLabel.setText("jLabel7");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -139,7 +170,7 @@ public class AddTagVehicleView extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(58, 58, 58)
-                        .addComponent(colorTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE))
+                        .addComponent(colorTextField))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(11, 11, 11)
@@ -156,22 +187,20 @@ public class AddTagVehicleView extends javax.swing.JFrame {
                         .addComponent(jLabel5)
                         .addGap(62, 62, 62)
                         .addComponent(yearTextField))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cancelButton))
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(patronLabel)
+                            .addComponent(jLabel1))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(tagNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(129, 129, 129)
+                                .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cancelButton)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(tagNumberTextField)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -182,9 +211,8 @@ public class AddTagVehicleView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(tagNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addGap(16, 16, 16)
+                    .addComponent(tagNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(plateNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -208,7 +236,7 @@ public class AddTagVehicleView extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(saveButton)
                     .addComponent(cancelButton))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -228,11 +256,78 @@ public class AddTagVehicleView extends javax.swing.JFrame {
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         // TODO add your handling code here:
         // get tag number from database
+        if(checkTagNumberExists() != null){
+            String plateNum = plateNumberTextField.getText();
+            String carMake = makeTextField.getText();
+            String carModel = modelTextField.getText();
+            String carYear = yearTextField.getText();
+            String carColor = colorTextField.getText();
+            //int tagNum = Integer.parseInt(tagNumberTextField.getText());
+            
+            String query = "INSERT INTO Vehicles VALUES(?, ?, ?, ?, ?, ?)";
+            try(Connection conn = sqlConn.getConnection(); PreparedStatement stmt = conn.prepareStatement(query);){
+                stmt.setInt(1, tag.getTagID());
+                stmt.setString(2, plateNum);
+                stmt.setString(3, carMake);
+                stmt.setString(4, carModel);
+                stmt.setString(5, carYear);
+                stmt.setString(6, carColor);
+                stmt.executeUpdate();
+                
+                
+            }
+            catch(SQLException sqle){
+                
+            }
+            query = "SELECT vehicle_id, car_make FROM Vehicles WHERE tag_id = ?";
+            try(Connection conn = sqlConn.getConnection(); PreparedStatement stmt = conn.prepareStatement(query);){
+                stmt.setInt(1, tag.getTagID());
+                ResultSet rs = stmt.executeQuery();
+                while(rs.next()){
+                    vehicleID = rs.getInt("vehicle_id");
+                    System.out.println(rs.getString("car_make"));
+                }
+            }
+            catch(SQLException sqle){
+                
+            }
+            query = "UPDATE Tags SET vehicle_id = ?, tag_status = ? WHERE tag_id = ?";
+            try(Connection conn = sqlConn.getConnection(); PreparedStatement stmt = conn.prepareStatement(query);){
+                stmt.setInt(1, vehicleID);
+                stmt.setString(2, "ASSIGNED");
+                stmt.setInt(3, tag.getTagID());
+                stmt.executeUpdate();
+            }
+            catch(SQLException sqle){
+                
+            }
+            query = "UPDATE Patrons SET vehicle_id = ? WHERE patron_id = ?";
+            try(Connection conn = sqlConn.getConnection(); PreparedStatement stmt = conn.prepareStatement(query);){
+                stmt.setInt(1, vehicleID);
+                stmt.setInt(2, patron.getaccID());
+                stmt.executeUpdate();
+            }
+            catch(SQLException sqle){
+                
+            }
+            
+            TagVehicleView tvv = new TagVehicleView();
+            tvv.setVisible(true);
+            dispose();
+        }
+        else{
+            
+        }
+        
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void modelTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modelTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_modelTextFieldActionPerformed
+
+    private void tagNumberTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tagNumberTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tagNumberTextFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -279,7 +374,6 @@ public class AddTagVehicleView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField colorTextField;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -22,6 +22,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -349,8 +351,6 @@ public class ViewPatronView extends javax.swing.JFrame {
         
         patronTable.getTableHeader().setReorderingAllowed(false);
         patronTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
-        
         
         try(Connection conn = sqlCon.getConnection(); Statement stmt = conn.createStatement();){
             //String SQL = "INSERT INTO Patrons VALUES(" + np.getAccountType() + ", '" + np.getfName() + "', '" + np.getlName() + "', '" + np.getSex() + "', '" + np.gethPhone() + "')";

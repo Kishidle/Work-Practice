@@ -22,7 +22,8 @@ public class MainView extends javax.swing.JFrame {
      */
     public MainView() {
         initComponents();
-        
+        setLocationRelativeTo(null);
+        setResizable(false);
         /*try {
             // Set System L&F
         UIManager.setLookAndFeel(

@@ -11,9 +11,12 @@ package amspractice.Model;
  */
 public class Vehicle {
     
-    private int tagNumber;
+    private int tagNumber, vehicleID;
+
+    
     private String plateNumber, carMake, carModel, carYear, carColor;
     private boolean isRegistered;
+    
     
     public Vehicle(){
         
@@ -73,6 +76,14 @@ public class Vehicle {
 
     public void setIsRegistered(boolean isRegistered) {
         this.isRegistered = isRegistered;
+    }
+    
+    public int getVehicleID() {
+        return vehicleID;
+    }
+
+    public void setVehicleID(int vehicleID) {
+        this.vehicleID = vehicleID;
     }
     
     
