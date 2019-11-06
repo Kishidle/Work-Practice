@@ -40,14 +40,20 @@ public class TagVehicleView extends javax.swing.JFrame {
     public TagVehicleView() {
         initComponents();
         
+        setLocationRelativeTo(null);
+        
+        this.setTitle("Tag and Vehicle Menu");
         tagList = new ArrayList<>();
         vehicleList = new ArrayList<>();
         patronList = new ArrayList<>();
         sqlCon = new SQLConnection();
+        
         carTable.getTableHeader().setReorderingAllowed(false);
         carTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         patronTable.getTableHeader().setReorderingAllowed(false);
         patronTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tagTable.getTableHeader().setReorderingAllowed(false);
+        tagTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         populatePatronTable();
         //jTable2.getColumnModel().getColumn(1).setPreferredWidth(35);
@@ -112,6 +118,7 @@ public class TagVehicleView extends javax.swing.JFrame {
                 int index = patronTable.getSelectedRow();
                 AddTagVehicleView atvv = new AddTagVehicleView(patronList.get(index));
                 atvv.setVisible(true);
+                dispose();
             }
             
         });
@@ -127,20 +134,25 @@ public class TagVehicleView extends javax.swing.JFrame {
                     //System.out.println(patronTable.getValueAt(patronTable.getSelectedRow(), 0).toString());
                     int selectedRow = patronTable.getSelectedRow();
                     
-                    String query = "SELECT V.vehicle_id FROM Vehicles V INNER JOIN Patrons P ON V.vehicle_id = P.vehicle_id WHERE P.patron_id = ?";
+                    DefaultTableModel carModel = (DefaultTableModel) carTable.getModel();
+                    carModel.setRowCount(0);
+                    DefaultTableModel tagModel = (DefaultTableModel) tagTable.getModel();
+                    tagModel.setRowCount(0);
+                    vehicleList.clear();
+                    
+                    String query = "SELECT V.plate_number, V.vehicle_id FROM Vehicles V INNER JOIN Patrons P ON V.vehicle_id = P.vehicle_id WHERE P.patron_id = ?";
                     try(Connection conn = sqlCon.getConnection(); PreparedStatement stmt = conn.prepareStatement(query);){
                         stmt.setInt(1, patronList.get(selectedRow).getaccID());
                         ResultSet rs = stmt.executeQuery();
-                        
-                        DefaultTableModel model = (DefaultTableModel) carTable.getModel();
-                        model.setRowCount(0);
-                        System.out.println("try test");
+   
+                        //System.out.println("try test");
                         while(rs.next()){
                              Vehicle vehicle = new Vehicle();
+                             vehicle.setPlateNumber(rs.getString("plate_number"));
                              vehicle.setVehicleID(rs.getInt("vehicle_id"));
                              vehicleList.add(vehicle);
                              
-                             model.addRow(new Object[]{vehicle.getVehicleID()});
+                             carModel.addRow(new Object[]{vehicle.getPlateNumber()});
                         }
                         rs.close();
                     }
@@ -150,20 +162,19 @@ public class TagVehicleView extends javax.swing.JFrame {
                     
                     query = "SELECT T.tag_id, T.tag_number FROM Tags T INNER JOIN Vehicles V ON T.vehicle_id = V.vehicle_id WHERE V.vehicle_id = ?";
                     try(Connection conn = sqlCon.getConnection(); PreparedStatement stmt = conn.prepareStatement(query);){
-                        DefaultTableModel model = (DefaultTableModel) tagTable.getModel();
-                        model.setRowCount(0);
+                        
                         //System.out.println(vehicleList.size());
                         for(int n = 0; n < vehicleList.size(); n++){
                             
                             stmt.setInt(1, vehicleList.get(n).getVehicleID());
                             ResultSet rs = stmt.executeQuery();
-                            System.out.println("tag testaaaaaaaaa");
+                            //System.out.println("tag testaaaaaaaaa");
                             while(rs.next()){
                                 Tag tag = new Tag();
                                 tag.setTagID(rs.getInt("tag_id"));
                                 tag.setTagNumber(rs.getInt("tag_number"));
                                 
-                                model.addRow(new Object[]{tag.getTagNumber()});
+                                tagModel.addRow(new Object[]{tag.getTagNumber()});
                             }
                             rs.close();
                         }

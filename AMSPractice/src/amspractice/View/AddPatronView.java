@@ -32,6 +32,7 @@ public class AddPatronView extends javax.swing.JFrame {
     
     public AddPatronView() {
         initComponents();
+        setLocationRelativeTo(null);
         sqlCon = new SQLConnection();
         this.setTitle("Add Patron");
         
@@ -40,7 +41,7 @@ public class AddPatronView extends javax.swing.JFrame {
     
     public void initializeComboBox(){
         
-        typeComboBox.addItemListener(new ItemListener(){
+        /*typeComboBox.addItemListener(new ItemListener(){
             
             public void itemStateChanged(ItemEvent e){
                 
@@ -67,7 +68,7 @@ public class AddPatronView extends javax.swing.JFrame {
                     }
                 }
             }
-        });
+        });*/
     }
 
     /**
@@ -250,7 +251,7 @@ public class AddPatronView extends javax.swing.JFrame {
         System.out.println(np.getfName() + " " + np.getlName());
         
         try(Connection conn = sqlCon.getConnection(); Statement stmt = conn.createStatement();){
-            String SQL = "INSERT INTO Patrons VALUES(" + np.getAccountType() + ", '" + np.getfName() + "', '" + np.getlName() + "', '" + np.getSex() + "', '" + np.gethPhone() + "')";
+            String SQL = "INSERT INTO Patrons (account_type, first_name, last_name, sex, home_phone) VALUES(" + np.getAccountType() + ", '" + np.getfName() + "', '" + np.getlName() + "', '" + np.getSex() + "', '" + np.gethPhone() + "')";
             //String SQL = "SELECT * FROM Patrons";
             /*ResultSet rs = stmt.executeQuery(SQL);
             while(rs.next()){

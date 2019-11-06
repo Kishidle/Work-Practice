@@ -30,6 +30,7 @@ public class EditPatronView extends javax.swing.JFrame {
     }
     public EditPatronView(Patron patron) {
         initComponents();
+        setLocationRelativeTo(null);
         sqlCon = new SQLConnection();
         this.setTitle("Edit Patron");
         this.patron = patron;

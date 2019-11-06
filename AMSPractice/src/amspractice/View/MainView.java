@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 /**
  *
@@ -73,6 +75,13 @@ public class MainView extends javax.swing.JFrame {
             }
         });
         
+        closeMenuItem.addActionListener(new ActionListener(){
+            
+            public void actionPerformed(ActionEvent e){
+                System.exit(0);
+            }
+        });
+        
     }
 
     /**
@@ -84,7 +93,6 @@ public class MainView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenu1 = new javax.swing.JMenu();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -93,8 +101,8 @@ public class MainView extends javax.swing.JFrame {
         viewPatronMenu = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         tagMenu = new javax.swing.JMenuItem();
-
-        jMenu1.setText("jMenu1");
+        exitMenu = new javax.swing.JMenu();
+        closeMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -117,7 +125,7 @@ public class MainView extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addComponent(jLabel1)
-                .addContainerGap(59, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         amsMenu.setText("Patron");
@@ -125,7 +133,7 @@ public class MainView extends javax.swing.JFrame {
         addPatronMenu.setText("Add Patron");
         amsMenu.add(addPatronMenu);
 
-        viewPatronMenu.setText("View Patron(s)");
+        viewPatronMenu.setText("View/Edit Patron(s)");
         amsMenu.add(viewPatronMenu);
 
         jMenuBar1.add(amsMenu);
@@ -136,6 +144,13 @@ public class MainView extends javax.swing.JFrame {
         jMenu2.add(tagMenu);
 
         jMenuBar1.add(jMenu2);
+
+        exitMenu.setText("Exit");
+
+        closeMenuItem.setText("Close Application");
+        exitMenu.add(closeMenuItem);
+
+        jMenuBar1.add(exitMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -191,8 +206,9 @@ public class MainView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem addPatronMenu;
     private javax.swing.JMenu amsMenu;
+    private javax.swing.JMenuItem closeMenuItem;
+    private javax.swing.JMenu exitMenu;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;

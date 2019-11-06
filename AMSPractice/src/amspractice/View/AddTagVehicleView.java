@@ -34,6 +34,8 @@ public class AddTagVehicleView extends javax.swing.JFrame {
     
     public AddTagVehicleView(Patron patron){
         initComponents();
+        setLocationRelativeTo(null);
+        this.setTitle("Add Tag and Vehicle");
         this.patron = patron;
         
         sqlConn = new SQLConnection();
@@ -51,7 +53,7 @@ public class AddTagVehicleView extends javax.swing.JFrame {
         hasTag = false;
         int tagNum = Integer.parseInt(tagNumberTextField.getText());
         String query = "SELECT tag_id, tag_number, tag_status FROM Tags WHERE tag_number = ?";
-        
+        //TODO just add WHERE tag_status = 'NOT_ASSIGNED' in query
         try(Connection conn = sqlConn.getConnection(); PreparedStatement stmt = conn.prepareStatement(query);){
             stmt.setInt(1, tagNum);
             ResultSet rs = stmt.executeQuery();
@@ -120,6 +122,7 @@ public class AddTagVehicleView extends javax.swing.JFrame {
         cancelButton = new javax.swing.JButton();
         tagNumberTextField = new javax.swing.JTextField();
         patronLabel = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -151,6 +154,11 @@ public class AddTagVehicleView extends javax.swing.JFrame {
         });
 
         cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         tagNumberTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -167,6 +175,7 @@ public class AddTagVehicleView extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(58, 58, 58)
@@ -191,16 +200,14 @@ public class AddTagVehicleView extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(patronLabel)
                             .addComponent(jLabel1))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(19, 19, 19)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(129, 129, 129)
                                 .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cancelButton)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(19, 19, 19)
-                                .addComponent(tagNumberTextField)))))
+                                .addComponent(cancelButton))
+                            .addComponent(tagNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -208,7 +215,9 @@ public class AddTagVehicleView extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(patronLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(tagNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -236,7 +245,7 @@ public class AddTagVehicleView extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(saveButton)
                     .addComponent(cancelButton))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -329,6 +338,13 @@ public class AddTagVehicleView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tagNumberTextFieldActionPerformed
 
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        // TODO add your handling code here:
+        TagVehicleView tvv = new TagVehicleView();
+        tvv.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -381,6 +397,7 @@ public class AddTagVehicleView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField makeTextField;
     private javax.swing.JTextField modelTextField;
     private javax.swing.JLabel patronLabel;
