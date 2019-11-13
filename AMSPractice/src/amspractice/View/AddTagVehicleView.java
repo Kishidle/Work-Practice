@@ -53,7 +53,7 @@ public class AddTagVehicleView extends javax.swing.JFrame {
         hasTag = false;
         int tagNum = Integer.parseInt(tagNumberTextField.getText());
         String query = "SELECT tag_id, tag_number, tag_status FROM Tags WHERE tag_number = ?";
-        //TODO just add WHERE tag_status = 'NOT_ASSIGNED' in query
+        
         try(Connection conn = sqlConn.getConnection(); PreparedStatement stmt = conn.prepareStatement(query);){
             stmt.setInt(1, tagNum);
             ResultSet rs = stmt.executeQuery();

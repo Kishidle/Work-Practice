@@ -16,7 +16,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="viewPatronMenu">
               <Properties>
-                <Property name="text" type="java.lang.String" value="View/Edit Patron(s)"/>
+                <Property name="text" type="java.lang.String" value="Manage Patrons"/>
               </Properties>
             </MenuItem>
           </SubComponents>

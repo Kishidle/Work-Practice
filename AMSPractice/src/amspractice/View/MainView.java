@@ -82,6 +82,10 @@ public class MainView extends javax.swing.JFrame {
             }
         });
         
+        addPatronMenu.setToolTipText("Add a Patron to the database.");
+        viewPatronMenu.setToolTipText("Search, edit, or add remarks to Patrons.");
+        tagMenu.setToolTipText("Add Tags to a Patron, or view their tags.");
+        
     }
 
     /**
@@ -133,7 +137,7 @@ public class MainView extends javax.swing.JFrame {
         addPatronMenu.setText("Add Patron");
         amsMenu.add(addPatronMenu);
 
-        viewPatronMenu.setText("View/Edit Patron(s)");
+        viewPatronMenu.setText("Manage Patrons");
         amsMenu.add(viewPatronMenu);
 
         jMenuBar1.add(amsMenu);

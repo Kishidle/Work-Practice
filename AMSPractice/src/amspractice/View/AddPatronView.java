@@ -11,6 +11,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -236,13 +237,7 @@ public class AddPatronView extends javax.swing.JFrame {
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         // TODO add your handling code here:
         Patron np = new Patron();
-        switch(typeComboBox.getSelectedIndex()){
-            case 0: np.setAccountType(1); break;
-            case 1: np.setAccountType(2); break;
-            case 2: np.setAccountType(3); break;
-            case 3: np.setAccountType(4); break;
-            case 4: np.setAccountType(5); break;
-        }
+        np.setAccountType(typeComboBox.getSelectedIndex() + 1);
         np.setfName(fNameTextField.getText());
         np.setlName(laNameTextField.getText());
         np.sethPhone(hPhoneTextField.getText());
@@ -250,17 +245,25 @@ public class AddPatronView extends javax.swing.JFrame {
         
         System.out.println(np.getfName() + " " + np.getlName());
         
-        try(Connection conn = sqlCon.getConnection(); Statement stmt = conn.createStatement();){
-            String SQL = "INSERT INTO Patrons (account_type, first_name, last_name, sex, home_phone) VALUES(" + np.getAccountType() + ", '" + np.getfName() + "', '" + np.getlName() + "', '" + np.getSex() + "', '" + np.gethPhone() + "')";
+        String sql = "INSERT INTO Patrons (account_type, first_name, last_name, sex, home_phone) VALUES (?, ?, ?, ?, ?)";
+        
+        try(Connection conn = sqlCon.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql);){
+            
+            stmt.setInt(1, np.getAccountType());
+            stmt.setString(2, np.getfName());
+            stmt.setString(3, np.getlName());
+            stmt.setString(4, np.getSex());
+            stmt.setString(5, np.gethPhone());
+            
             //String SQL = "SELECT * FROM Patrons";
             /*ResultSet rs = stmt.executeQuery(SQL);
             while(rs.next()){
                 System.out.println(rs.getString("first_name"));
             }*/
-            int x = stmt.executeUpdate(SQL);
+            int x = stmt.executeUpdate();
             //int x = 1;
             if(x > 0){
-                System.out.print("Patron registered successfully");
+                System.out.print("Records successfully saved.");
                 JOptionPane.showMessageDialog(null, "Patron registered successfully.");
             }
             else{

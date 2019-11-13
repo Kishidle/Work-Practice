@@ -13,6 +13,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -289,47 +290,47 @@ public class ViewPatronView extends javax.swing.JFrame {
         // TODO get patron_id in select statement for use in add tag and add vehicle view and right click functionality of view patron
         
         patronList.clear(); 
-        String fName = "", lName = "", sex = "", hPhone = ""; 
-        String searchSQL = "SELECT patron_id, account_type, first_name, last_name, sex, home_phone FROM Patrons ";
-        switch(accountTypeComboBox.getSelectedIndex()){
-            case 1: 
-                searchSQL = searchSQL.concat("WHERE account_type = 1"); 
-                break;
-            case 2:
-                searchSQL = searchSQL.concat("WHERE account_type = 2");
-                break;
-            case 3:
-                searchSQL = searchSQL.concat("WHERE account_type = 3");
-                break;
-            case 4:
-                searchSQL = searchSQL.concat("WHERE account_type = 4");
-                break;
-            case 5:
-                searchSQL = searchSQL.concat("WHERE account_type = 5");
-                break;
-        }
-        if(accountTypeComboBox.getSelectedIndex() != 0){
-            searchSQL = searchSQL.concat(" AND ");
-        }
-        else{
-            searchSQL = searchSQL.concat("WHERE ");
-        }
-        
+        String fName = "", lName = "", sex = "", hPhone = "";
+        String sql;
+        int i = 0;
+        System.out.println("Testing View Test 1");
         fName = fNameTextField.getText();
         lName = lNameTextField.getText();
         sex = sexTextField.getText();
         hPhone = hPhoneTextField.getText();
         
-        searchSQL = searchSQL.concat("first_name LIKE '" + fName + "%' AND last_name LIKE '" + lName + "%' AND sex LIKE '" + sex + "%' AND home_phone LIKE '" + hPhone + "%'");
+        if(accountTypeComboBox.getSelectedIndex() == 0){
+            sql = "SELECT patron_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE first_name LIKE ? AND last_name LIKE ? AND sex LIKE ? AND home_phone LIKE ?";
+        }
+        else{
+            sql = "SELECT patron_id, account_type, first_name, last_name, sex, home_phone FROM Patrons WHERE account_type = ?"
+                    + " AND first_name LIKE ? AND last_name LIKE ? AND sex LIKE ? AND home_phone LIKE ?";
+        }
         
-        System.out.println("searchSQL test");
-        System.out.println(searchSQL);
+        System.out.println("QUERY:" + sql);
         
-       
-        try(Connection conn = sqlCon.getConnection(); Statement stmt = conn.createStatement();){
-            ResultSet rs = stmt.executeQuery(searchSQL);
+
+        try(Connection conn = sqlCon.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql);){
+            
+            
+            if(accountTypeComboBox.getSelectedIndex() == 0){
+                i = 1;
+            }
+            else if(accountTypeComboBox.getSelectedIndex() > 0){
+                stmt.setInt(1, accountTypeComboBox.getSelectedIndex());
+                i = 0;
+            }
+           
+            stmt.setString(2 - i, fName + "%");
+            stmt.setString(3 - i, lName + "%");
+            stmt.setString(4 - i, sex + "%");
+            stmt.setString(5 - i, hPhone + "%");
+            
+            System.out.println("View Patron Testing");
+            ResultSet rs = stmt.executeQuery();
             DefaultTableModel model = (DefaultTableModel) patronTable.getModel();
-                model.setRowCount(0);
+            model.setRowCount(0);
+            System.out.println("model set row count");
                 while(rs.next()){
                     //TODO add to Patron class to get the account id later
                     Patron patron = new Patron();
@@ -416,7 +417,18 @@ public class ViewPatronView extends javax.swing.JFrame {
             }
         });
         popupMenu.add(editPatron);
-        JMenuItem addTag = new JMenuItem("Add Tag to Patron");
+        JMenuItem addRemark = new JMenuItem("Add Remark to Patron");
+        addRemark.addActionListener(new ActionListener(){
+            
+            @Override
+            public void actionPerformed(ActionEvent e){
+                int index = patronTable.getSelectedRow();
+                AddRemarksView arv = new AddRemarksView(patronList.get(index));
+                arv.setVisible(true);
+                dispose(); 
+            }
+        });
+        popupMenu.add(addRemark);
         patronTable.setComponentPopupMenu(popupMenu);
         
     }
