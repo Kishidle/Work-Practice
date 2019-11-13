@@ -9,7 +9,7 @@ package amspractice.Model;
  *
  * @author ramon
  */
-public class Remarks {
+public class Remark {
     
     private int remarkID;
     private String remark;

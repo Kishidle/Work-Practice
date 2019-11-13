@@ -12,6 +12,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import amspractice.Controller.SQLConnection;
+import amspractice.Model.Remark;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author ramon
@@ -21,15 +25,47 @@ public class RemarksCommentsView extends javax.swing.JFrame {
     /**
      * Creates new form RemarksCommentsView
      */
+    private Patron patron;
+    private SQLConnection sqlCon;
+    private ArrayList<Remark> remarkList;
     public RemarksCommentsView() {
         initComponents();
+        
     }
     public RemarksCommentsView(Patron patron){
         
+        this.patron = patron;
+        remarkList = new ArrayList<>();
+        sqlCon = new SQLConnection();
         initComponents();
         patronLabel.setText(patron.getfName());
+        initTable();
     }
-
+    
+    public void initTable(){
+        
+        String sql = "SELECT remark_text, remark_by, collect_agent, remark_date FROM Remarks WHERE patron_id = ?";
+        try(Connection conn = sqlCon.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql);){
+            stmt.setInt(1, patron.getaccID());
+            ResultSet rs = stmt.executeQuery();
+            DefaultTableModel model = (DefaultTableModel) remarkTable.getModel();
+            while(rs.next()){
+                Remark remark = new Remark();
+                remark.setRemark(rs.getString("remark_text"));
+                remark.setRemarkBy(rs.getString("remark_by"));
+                remark.setCollectAgent(rs.getString("collect_agent"));
+                remark.setRemarkDate(rs.getString("remark_date"));
+                
+                remarkList.add(remark);
+                
+                model.addRow(new Object[]{remark.getRemarkDate(), remark.getRemark(), remark.getRemarkBy(), remark.getCollectAgent()});
+            }
+        }
+        catch(SQLException sqle){
+            
+        }
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -42,13 +78,13 @@ public class RemarksCommentsView extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         patronLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        remarkTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         patronLabel.setText("jLabel1");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        remarkTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -67,8 +103,8 @@ public class RemarksCommentsView extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
+        remarkTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(remarkTable);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -147,7 +183,7 @@ public class RemarksCommentsView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel patronLabel;
+    private javax.swing.JTable remarkTable;
     // End of variables declaration//GEN-END:variables
 }

@@ -429,6 +429,19 @@ public class ViewPatronView extends javax.swing.JFrame {
             }
         });
         popupMenu.add(addRemark);
+        
+        JMenuItem viewRemarks = new JMenuItem("View Patron's remarks");
+        viewRemarks.addActionListener(new ActionListener(){
+            
+            @Override
+            public void actionPerformed(ActionEvent e){
+                int index = patronTable.getSelectedRow();
+                RemarksCommentsView rcv = new RemarksCommentsView(patronList.get(index));
+                rcv.setVisible(true);
+                dispose();
+            }
+        });
+        popupMenu.add(viewRemarks);
         patronTable.setComponentPopupMenu(popupMenu);
         
     }
