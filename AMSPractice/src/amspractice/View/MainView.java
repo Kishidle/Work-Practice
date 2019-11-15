@@ -5,8 +5,10 @@
  */
 package amspractice.View;
 
+import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -26,6 +28,9 @@ public class MainView extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
+        
+        TestPanel3 testPanel = new TestPanel3();
+        jPanel1.add(testPanel, "test");
         /*try {
             // Set System L&F
         UIManager.setLookAndFeel(
@@ -98,7 +103,13 @@ public class MainView extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        panelOne = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        panelTwo = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        panelThree = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         amsMenu = new javax.swing.JMenu();
         addPatronMenu = new javax.swing.JMenuItem();
@@ -106,31 +117,89 @@ public class MainView extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         tagMenu = new javax.swing.JMenuItem();
         exitMenu = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         closeMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 64)); // NOI18N
-        jLabel1.setForeground(java.awt.Color.blue);
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("AMS");
+        jPanel1.setLayout(new java.awt.CardLayout());
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(111, 111, 111)
+        jLabel1.setText("Test");
+
+        javax.swing.GroupLayout panelOneLayout = new javax.swing.GroupLayout(panelOne);
+        panelOne.setLayout(panelOneLayout);
+        panelOneLayout.setHorizontalGroup(
+            panelOneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelOneLayout.createSequentialGroup()
+                .addGap(136, 136, 136)
                 .addComponent(jLabel1)
-                .addContainerGap(116, Short.MAX_VALUE))
+                .addContainerGap(309, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
+        panelOneLayout.setVerticalGroup(
+            panelOneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelOneLayout.createSequentialGroup()
+                .addGap(76, 76, 76)
                 .addComponent(jLabel1)
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addContainerGap(214, Short.MAX_VALUE))
         );
+
+        jPanel1.add(panelOne, "card2");
+
+        jLabel2.setText("Test 2");
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelTwoLayout = new javax.swing.GroupLayout(panelTwo);
+        panelTwo.setLayout(panelTwoLayout);
+        panelTwoLayout.setHorizontalGroup(
+            panelTwoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTwoLayout.createSequentialGroup()
+                .addGroup(panelTwoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelTwoLayout.createSequentialGroup()
+                        .addGap(151, 151, 151)
+                        .addComponent(jLabel2))
+                    .addGroup(panelTwoLayout.createSequentialGroup()
+                        .addGap(130, 130, 130)
+                        .addComponent(jButton1)))
+                .addContainerGap(263, Short.MAX_VALUE))
+        );
+        panelTwoLayout.setVerticalGroup(
+            panelTwoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTwoLayout.createSequentialGroup()
+                .addGap(80, 80, 80)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addContainerGap(166, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(panelTwo, "card3");
+
+        jLabel3.setText("Test 3");
+
+        javax.swing.GroupLayout panelThreeLayout = new javax.swing.GroupLayout(panelThree);
+        panelThree.setLayout(panelThreeLayout);
+        panelThreeLayout.setHorizontalGroup(
+            panelThreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelThreeLayout.createSequentialGroup()
+                .addGap(148, 148, 148)
+                .addComponent(jLabel3)
+                .addContainerGap(287, Short.MAX_VALUE))
+        );
+        panelThreeLayout.setVerticalGroup(
+            panelThreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelThreeLayout.createSequentialGroup()
+                .addGap(77, 77, 77)
+                .addComponent(jLabel3)
+                .addContainerGap(213, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(panelThree, "card4");
 
         amsMenu.setText("Patron");
 
@@ -151,6 +220,14 @@ public class MainView extends javax.swing.JFrame {
 
         exitMenu.setText("Exit");
 
+        jMenuItem1.setText("Test JPanels");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        exitMenu.add(jMenuItem1);
+
         closeMenuItem.setText("Close Application");
         exitMenu.add(closeMenuItem);
 
@@ -162,15 +239,30 @@ public class MainView extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        CardLayout card = (CardLayout) jPanel1.getLayout();
+        
+        this.pack();
+        card.show(jPanel1, "test");
+        
+        
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(null, "Test");
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -212,10 +304,17 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JMenu amsMenu;
     private javax.swing.JMenuItem closeMenuItem;
     private javax.swing.JMenu exitMenu;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel panelOne;
+    private javax.swing.JPanel panelThree;
+    private javax.swing.JPanel panelTwo;
     private javax.swing.JMenuItem tagMenu;
     private javax.swing.JMenuItem viewPatronMenu;
     // End of variables declaration//GEN-END:variables
